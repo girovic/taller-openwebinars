@@ -1,23 +1,30 @@
 pipeline {
-        agent any
-        stages {
-                stage('Obtener el repo') {
-                      steps {
-                             git branch: 'main', url: 'https://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@github.com/girovic/taller-openwebinars.git'
-                            }
-                     }
-                stage('Generar la documentacion') {
-                       steps {
-                             sh "doxygen"
-                            }
+    agent any
 
-                     }       
-                post {
-                      success {
-                       publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'html/', reportFiles: 'files.html', reportName: 'Documentación', reportTitles: ''])
-
-                    }
-               }                    
-
+    stages {
+        stage('Obtener el repositorio') {
+            steps {
+                git branch: 'main', url: 'https://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@github.com/girovic/taller-openwebinars.git'
+            }
         }
+        stage('Construir la documetación') {
+            steps {
+                sh "doxygen"
+            }
+            
+        }
+
+        stage('Archivar la documentación') {
+            steps {
+                sh "zip documentation.zip -r html/*"
+            }
+        }
+    }
+    post {
+        success {
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'html/', reportFiles: 'files.html', reportName: 'Documentación', reportTitles: ''])
+            archive "documentation.zip"
+        }
+    }
 }
+
