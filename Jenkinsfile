@@ -23,7 +23,7 @@ pipeline {
             steps {
                 sh 'make cppcheck-xml'
                // recordIssues(tools: [cppCheck(pattern: 'reports/cppcheck/*.xml')])
-               recordIssues qualityGates: [[threshold: 1, type: 'TOTAL', unstable: false]], tools: [cppCheck(pattern: 'reports/cppcheck/*.xml')]
+               recordIssues qualityGates: [[threshold: 5, type: 'TOTAL_HIGH', unstable: false]], tools: [cppCheck(pattern: 'reports/cppcheck/*.xml')]
             }
         }
         stage('Tests unitarios') {
