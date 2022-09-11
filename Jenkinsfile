@@ -22,7 +22,8 @@ pipeline {
         stage('Análisis estático') {
             steps {
                 sh 'make cppcheck-xml'
-                recordIssues(tools: [cppCheck(pattern: 'reports/cppcheck/*.xml')])
+               // recordIssues(tools: [cppCheck(pattern: 'reports/cppcheck/*.xml')])
+               recordIssues qualityGates: [[threshold: 1, type: 'TOTAL', unstable: false]], tools: [cppCheck(pattern: 'reports/cppcheck/*.xml')]
             }
         }
 
